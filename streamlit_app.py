@@ -1,7 +1,9 @@
 # gpt3 professional email generator by stefanrmmr - version June 2022
 
 import os
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key= "your key",)
 import streamlit as st
 
 # DESIGN implement changes to the standard streamlit UI/UX
@@ -33,7 +35,6 @@ st.markdown(hide_streamlit_footer, unsafe_allow_html=True)
 
 
 # Connect to OpenAI GPT-3, fetch API key from Streamlit secrets
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 def gen_mail_contents(email_contents):
@@ -41,21 +42,19 @@ def gen_mail_contents(email_contents):
     # iterate through all seperate topics
     for topic in range(len(email_contents)):
         input_text = email_contents[topic]
-        rephrased_content = openai.Completion.create(
-            engine="text-davinci-002",
-            prompt=f"Rewrite the text to be elaborate and polite.\nAbbreviations need to be replaced.\nText: {input_text}\nRewritten text:",
-            # prompt=f"Rewrite the text to sound professional, elaborate and polite.\nText: {input_text}\nRewritten text:",
-            temperature=0.8,
-            max_tokens=len(input_text)*3,
-            top_p=0.8,
-            best_of=2,
-            frequency_penalty=0.0,
-            presence_penalty=0.0)
+        rephrased_content = client.completions.create(model="gpt-3.5-turbo-instruct",
+        prompt=f"Rewrite the text to be elaborate and polite.\nAbbreviations need to be replaced.\nText: {input_text}\nRewritten text:",
+        # prompt=f"Rewrite the text to sound professional, elaborate and polite.\nText: {input_text}\nRewritten text:",
+        temperature=0.8,
+        max_tokens=len(input_text)*3,
+        top_p=0.8,
+        best_of=2,
+        frequency_penalty=0.0,
+        presence_penalty=0.0)
 
         # replace existing topic text with updated
-        email_contents[topic] = rephrased_content.get("choices")[0]['text']
+        email_contents[topic] = rephrased_content.choices[0].text
     return email_contents
-
 
 def gen_mail_format(sender, recipient, style, email_contents):
     # update the contents data with more formal statements
@@ -67,18 +66,17 @@ def gen_mail_format(sender, recipient, style, email_contents):
         contents_str = contents_str + f"\nContent{topic+1}: " + email_contents[topic]
         contents_length += len(email_contents[topic])  # calc total chars
 
-    email_final_text = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=f"Write a professional email sounds {style} and includes Content1 and Content2 in that order.\n\nSender: {sender}\nRecipient: {recipient} {contents_str}\n\nEmail Text:",
-        # prompt=f"Write a professional sounding email text that includes all of the following contents separately.\nThe text needs to be written to adhere to the specified writing styles and abbreviations need to be replaced.\n\nSender: {sender}\nRecipient: {recipient} {contents_str}\nWriting Styles: motivated, formal\n\nEmail Text:",
-        temperature=0.8,
-        max_tokens=contents_length*2,
-        top_p=0.8,
-        best_of=2,
-        frequency_penalty=0.0,
-        presence_penalty=0.0)
+    email_final_text = client.completions.create(model="gpt-3.5-turbo-instruct",
+    prompt=f"Write a professional email sounds {style} and includes Content1 and Content2 in that order.\n\nSender: {sender}\nRecipient: {recipient} {contents_str}\n\nEmail Text:",
+    # prompt=f"Write a professional sounding email text that includes all of the following contents separately.\nThe text needs to be written to adhere to the specified writing styles and abbreviations need to be replaced.\n\nSender: {sender}\nRecipient: {recipient} {contents_str}\nWriting Styles: motivated, formal\n\nEmail Text:",
+    temperature=0.8,
+    max_tokens=contents_length*2,
+    top_p=0.8,
+    best_of=2,
+    frequency_penalty=0.0,
+    presence_penalty=0.0)
 
-    return email_final_text.get("choices")[0]['text']
+    return email_final_text.choices[0].text
 
 
 def main_gpt3emailgen():
@@ -86,7 +84,7 @@ def main_gpt3emailgen():
     st.image('img/image_banner.png')  # TITLE and Creator information
     st.markdown('Hello, I am your AI Powered Email Assistant. You can generate professional sounding emails based on your direct comments')
     st.write('\n')  # add spacing
-    
+
     st.subheader('\nWhat is your email all about?\n')
     with st.expander("SECTION - Email Input", expanded=True):
 
@@ -135,4 +133,4 @@ def main_gpt3emailgen():
 
 if __name__ == '__main__':
     # call main function
-    main_gpt3emailgen()
+    main_gpt3emailgen()                                                                                                                                                               
