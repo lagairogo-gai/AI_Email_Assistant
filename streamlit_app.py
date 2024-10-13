@@ -84,12 +84,9 @@ def gen_mail_format(sender, recipient, style, email_contents):
 def main_gpt3emailgen():
 
     st.image('img/image_banner.png')  # TITLE and Creator information
-    st.markdown('Generate professional sounding emails based on your direct comments - powered by Artificial Intelligence (OpenAI GPT-3) Implemented by '
-        '[stefanrmmr](https://www.linkedin.com/in/stefanrmmr/) - '
-        'view project source code on '
-        '[GitHub](https://github.com/stefanrmmr/gpt3_email_generator)')
+    st.markdown('Hello, I am your AI Powered Email Assistant. You can generate professional sounding emails based on your direct comments')
     st.write('\n')  # add spacing
-
+    
     st.subheader('\nWhat is your email all about?\n')
     with st.expander("SECTION - Email Input", expanded=True):
 
