@@ -3,7 +3,11 @@
 import os
 from openai import OpenAI
 
+<<<<<<< HEAD
 client = OpenAI(api_key= "",)
+=======
+client = OpenAI(api_key= "your key",)
+>>>>>>> 7d5a2769e7d068cd09b03e023005603bdcdc6714
 import streamlit as st
 
 # DESIGN implement changes to the standard streamlit UI/UX
@@ -55,7 +59,6 @@ def gen_mail_contents(email_contents):
         # replace existing topic text with updated
         email_contents[topic] = rephrased_content.choices[0].text
     return email_contents
-
 
 def gen_mail_format(sender, recipient, style, email_contents):
     # update the contents data with more formal statements
@@ -134,4 +137,4 @@ def main_gpt3emailgen():
 
 if __name__ == '__main__':
     # call main function
-    main_gpt3emailgen()
+    main_gpt3emailgen()                                                                                                                                                               
