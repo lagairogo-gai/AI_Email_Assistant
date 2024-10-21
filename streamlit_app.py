@@ -3,7 +3,7 @@
 import os
 from openai import OpenAI
 
-client = OpenAI(api_key= "test",)
+client = OpenAI(api_key= "",)
 import streamlit as st
 
 # DESIGN implement changes to the standard streamlit UI/UX
